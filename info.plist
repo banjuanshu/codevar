@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.banjuanshu.codevar</string>
+	<key>category</key>
+	<string>Tools</string>
+	<key>connections</key>
+	<dict>
+		<key>DAA73AC5-F6A3-45E8-8447-152A11456208</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>FC7D2149-2FEB-4003-A367-AE960A733228</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>AC4BD5B1-428A-4732-8251-671ADDD43DB5</string>
+				<key>modifiers</key>
+				<integer>1048576</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Bjs</string>
+	<key>description</key>
+	<string></string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>CodeVar</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>FC7D2149-2FEB-4003-A367-AE960A733228</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>v</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>请输入关键字....</string>
+				<key>script</key>
+				<string>#!/usr/bin/env python
+# coding=utf-8
+
+import os
+import sys
+import urllib
+import json
+import urllib.request
+import string
+
+from urllib.parse import quote
+
+
+
+from alfred.feedback import Feedback
+
+
+
+def query(txt):
+	url = 'https://www.banjuanshu.com/api/var/?text='+txt
+	url = quote(url,safe=string.printable)
+	res = urllib.request.urlopen(url).read()
+	res = res.decode('utf-8')
+	res = json.loads(res)
+
+	
+	return res
+
+def main():
+	fb  = Feedback()
+	text = "{query}"
+
+	obj = query(text)
+	if obj['retcode'] != '100':
+		rid = 'Rid无效'
+		subtitle = '无法找到uid,请确认Rid的真实性.'
+	else:
+		obj = obj['content']
+		for item in obj:
+			title = item['var']
+			subtitle = item['key']
+			arg = item['str']
+
+			kwargs = {
+				'title': title,
+				'subtitle':subtitle,
+				'arg': arg
+			}
+			fb.addItem(**kwargs)
+	
+	
+	fb.output()
+
+
+main()
+</string>
+				<key>scriptargtype</key>
+				<integer>0</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>输入关键字查询变量</string>
+				<key>title</key>
+				<string>变量查询</string>
+				<key>type</key>
+				<integer>3</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>DAA73AC5-F6A3-45E8-8447-152A11456208</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>AC4BD5B1-428A-4732-8251-671ADDD43DB5</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string></string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>1A06FE50-7F79-4530-A1D0-7255AD6FF67E</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>1A06FE50-7F79-4530-A1D0-7255AD6FF67E</key>
+		<dict>
+			<key>xpos</key>
+			<integer>450</integer>
+			<key>ypos</key>
+			<integer>360</integer>
+		</dict>
+		<key>AC4BD5B1-428A-4732-8251-671ADDD43DB5</key>
+		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
+			<key>ypos</key>
+			<integer>220</integer>
+		</dict>
+		<key>DAA73AC5-F6A3-45E8-8447-152A11456208</key>
+		<dict>
+			<key>xpos</key>
+			<integer>130</integer>
+			<key>ypos</key>
+			<integer>110</integer>
+		</dict>
+		<key>FC7D2149-2FEB-4003-A367-AE960A733228</key>
+		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
+			<key>ypos</key>
+			<integer>70</integer>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>https://www.banjuanshu.com</string>
+</dict>
+</plist>
